@@ -1,0 +1,19 @@
+development:
+  clients:
+    default:
+      database: rails_app_development
+      hosts:
+        - <%= ENV['MONGODB_HOST'] || 'localhost' %>:27017
+      options:
+
+test:
+  clients:
+    default:
+      database: rails_app_test
+      hosts:
+        - <%= ENV['MONGODB_HOST'] || 'localhost' %>:27017
+      options:
+        read:
+          mode: :primary
+        max_pool_size: 1
+        
