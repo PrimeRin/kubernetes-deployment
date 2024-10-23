@@ -1,0 +1,9 @@
+development:
+  clients:
+    default:
+      database: rails_app_development
+      hosts:
+        - <%= ENV['ME_CONFIG_MONGODB_SERVER'] %>:27017
+      options:
+        user: <%= ENV['ME_CONFIG_MONGODB_ADMINUSERNAME'] %>
+        password: <%= ENV['ME_CONFIG_MONGODB_ADMINPASSWORD'] %>

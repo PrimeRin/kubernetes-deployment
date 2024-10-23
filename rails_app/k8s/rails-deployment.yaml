@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rails-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rails-app
+  template:
+    metadata:
+      labels:
+        app: rails-app
+    spec:
+      containers:
+        - name: rails-app
+          image: primerin/my-rails-app:latest
+          ports:
+            - containerPort: 3000
+          env:
+            - name: ME_CONFIG_MONGODB_ADMINUSERNAME
+              valueFrom: 
+                secretKeyRef:
+                  name: mongo-secret
+                  key: mongo-root-username
+            - name: ME_CONFIG_MONGODB_ADMINPASSWORD
+              valueFrom: 
+                secretKeyRef:
+                  name: mongo-secret
+                  key: mongo-root-password
+            - name: ME_CONFIG_MONGODB_SERVER
+              valueFrom: 
+                configMapKeyRef:
+                  name: mongo-configmap
+                  key: database_url
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rails-service
+spec:
+  selector:
+    app: rails-app
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
+      nodePort: 30000
+  type: LoadBalancer
+
